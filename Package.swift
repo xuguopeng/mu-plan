@@ -3,13 +3,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "DesktopPetPlanner",
+    name: "MuPlan",
     platforms: [
         .macOS(.v14)
     ],
     products: [
         .library(name: "PetPlannerCore", targets: ["PetPlannerCore"]),
-        .executable(name: "DesktopPetPlanner", targets: ["DesktopPetPlannerApp"])
+        .executable(name: "MuPlan", targets: ["DesktopPetPlannerApp"])
     ],
     targets: [
         .target(name: "PetPlannerCore"),

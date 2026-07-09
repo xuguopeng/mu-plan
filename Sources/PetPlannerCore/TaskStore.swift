@@ -30,6 +30,7 @@ public final class TaskStore {
     }
 
     public func load() throws {
+        try migrateLegacyStoreIfNeeded()
         guard FileManager.default.fileExists(atPath: fileURL.path) else {
             tasks = []
             settings = PlannerSettings()
@@ -166,6 +167,31 @@ public final class TaskStore {
     }
 
     public static func defaultStoreURL() -> URL {
+        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            ?? FileManager.default.homeDirectoryForCurrentUser
+        return base
+            .appendingPathComponent("MuPlan", isDirectory: true)
+            .appendingPathComponent("planner.json")
+    }
+
+    private func migrateLegacyStoreIfNeeded() throws {
+        guard fileURL == Self.defaultStoreURL(),
+              !FileManager.default.fileExists(atPath: fileURL.path)
+        else {
+            return
+        }
+        let legacyURL = Self.legacyStoreURL()
+        guard FileManager.default.fileExists(atPath: legacyURL.path) else {
+            return
+        }
+        try FileManager.default.createDirectory(
+            at: fileURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        try FileManager.default.copyItem(at: legacyURL, to: fileURL)
+    }
+
+    private static func legacyStoreURL() -> URL {
         let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? FileManager.default.homeDirectoryForCurrentUser
         return base

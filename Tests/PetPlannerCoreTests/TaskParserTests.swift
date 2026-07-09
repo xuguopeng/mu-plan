@@ -36,8 +36,8 @@ struct TaskParserTests {
         #expect(parsed.remindAt == parsed.dueAt)
     }
 
-    @Test("waiting task gets default reminder")
-    func waitingTaskGetsDefaultReminder() throws {
+    @Test("waiting task without explicit time has no reminder")
+    func waitingTaskWithoutExplicitTimeHasNoReminder() throws {
         let now = try date(year: 2026, month: 7, day: 9, hour: 11, minute: 0)
         let parser = TaskParser(calendar: calendar, defaultWaitingReminderMinutes: 25)
 
@@ -45,7 +45,7 @@ struct TaskParserTests {
 
         #expect(parsed.status == .waiting)
         #expect(parsed.isPinned)
-        #expect(parsed.remindAt == calendar.date(byAdding: .minute, value: 25, to: now))
+        #expect(parsed.remindAt == nil)
     }
 
     @Test("plain task still saves as active")
@@ -58,6 +58,18 @@ struct TaskParserTests {
         #expect(parsed.status == .active)
         #expect(parsed.priority == .normal)
         #expect(!parsed.isPinned)
+        #expect(parsed.remindAt == nil)
+    }
+
+    @Test("ordinary content time is not parsed as reminder")
+    func ordinaryContentTimeIsNotParsedAsReminder() throws {
+        let now = try date(year: 2026, month: 7, day: 9, hour: 11, minute: 0)
+        let parser = TaskParser(calendar: calendar)
+
+        let parsed = parser.parse("每天晚上 8 点发小说，一个小说发 5 篇。", now: now)
+
+        #expect(parsed.status == .active)
+        #expect(parsed.dueAt == nil)
         #expect(parsed.remindAt == nil)
     }
 

@@ -19,7 +19,7 @@ It includes:
 - A click-to-open planning panel.
 - A global keyboard shortcut for quick task entry.
 - Rule-based natural language parsing for times, urgency, and waiting states.
-- Manual "waiting finished" flow plus default timed reminders.
+- Manual "waiting finished" flow plus explicit timed reminders.
 - Local-only persistence.
 - macOS notifications and subtle in-app pet state changes for reminders.
 
@@ -120,7 +120,7 @@ It should recognize:
 - Urgency keywords: "urgent", "important", "before".
 - Waiting keywords: "wait for AI", "wait for Cursor", "wait for Claude", "AI finishes".
 
-If text indicates a waiting task but no time is parsed, the app assigns a default reminder time, initially 20 minutes later.
+If text indicates a waiting task but no time is parsed, the app marks it as waiting and pinned without assigning a reminder time.
 
 Parsing failures should not block entry. The raw task text is still saved.
 

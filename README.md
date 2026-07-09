@@ -1,46 +1,115 @@
-# Desktop Pet Planner
+# MuPlan
 
-A Mac-native SwiftUI planner for interrupted work. The first milestone includes a minimal planning panel, local JSON persistence, and rule-based parsing for quick task input.
+MuPlan 是一个 Mac 原生桌面计划应用，用来接住被打断的工作。
 
-## Current Milestone
+它的出发点很简单：一天里我们经常正在做一件事，突然被另一件事、一个消息、一次会议，或者一次 AI 任务打断。尤其是现在经常把事情交给 AI、Cursor、Claude 或其他工具去跑，自己转头去处理别的事。等那边结束，这边刚才做到哪里、该回来看什么，就很容易忘掉。
 
-Implemented:
+MuPlan 想解决的不是复杂项目管理，而是这个很具体的瞬间：
 
-- Swift Package macOS app scaffold.
-- Core task model and settings model.
-- JSON persistence in Application Support.
-- Store operations for create, complete, delete, pin, unpin, waiting, active, and postpone.
-- Rule-based parser for English and Chinese task input.
-- Minimal SwiftUI planning panel with input, filters, pinned tasks, and task actions.
-- Unit tests for parser and store behavior.
+> 我刚才在等什么？我等完以后要回到哪件事？
 
-Not implemented yet:
+## 设计想法
 
-- Desktop pet floating window.
-- Global shortcut quick input.
-- macOS notifications.
-- Pet visual reminder states.
+MuPlan 不把自己做成一个沉重的 Todo 应用，也不希望你每天打开一个复杂看板。它更像桌面上一只安静的小宠物：
 
-## Build
+- 平时常驻在桌面上方，不太显眼。
+- 只显示你想一直看见的几件事。
+- 主页面可以关闭，小浮窗继续留着。
+- 点击小浮窗，可以重新打开主页面。
+- 没有明确选择时间的任务，不会强行显示时间。
+
+这个应用的核心是“提醒自己回到现场”，不是“管理所有人生计划”。
+
+## 当前功能
+
+- Mac 原生 SwiftUI 应用。
+- 桌面小浮窗，显示钉住任务。
+- 主页面用于添加、筛选和管理任务。
+- 支持中文自然输入，例如：
+  - `等 AI 跑完后继续改样式`
+  - `20分钟后提醒我看 Cursor 报错`
+  - `下午2点前确认报价，紧急`
+  - `每天晚上 8 点发小说，一个小说发 5 篇。`
+- 支持任务状态：
+  - 进行中
+  - 等待中
+  - 稍后
+  - 已完成
+- 支持桌面显示/取消显示。
+- 支持本地 JSON 存储。
+- 支持打包成 `MuPlan.app`。
+
+## 解析规则
+
+MuPlan 当前使用规则解析，不调用 AI。
+
+会识别：
+
+- `20分钟后`
+- `半小时后`
+- `下午2点前`
+- `紧急`
+- `等 AI`
+- `等 Cursor`
+- `跑完`
+
+不会误判：
+
+- `每天晚上 8 点发小说`
+
+这类内容里的“8 点”只是任务内容，不是提醒时间；没有明确说“提醒我”“截止”“前”“20分钟后”，就不会在小浮窗右上角显示时间。
+
+## 构建
 
 ```bash
 swift build
 ```
 
-## Test
+## 测试
 
 ```bash
 swift test
 ```
 
-## Run
+## 运行
 
 ```bash
-swift run DesktopPetPlanner
+swift run MuPlan
 ```
 
-Data is saved to:
+## 打包
+
+```bash
+bash scripts/package_app.sh
+```
+
+打包后应用位置：
 
 ```text
-~/Library/Application Support/DesktopPetPlanner/planner.json
+dist/MuPlan.app
 ```
+
+## 数据位置
+
+任务数据保存在：
+
+```text
+~/Library/Application Support/MuPlan/planner.json
+```
+
+如果你之前运行过早期原型，MuPlan 会自动从旧的 `DesktopPetPlanner` 数据目录复制一次历史任务。
+
+## 更新节奏
+
+我会在使用中持续记录问题和想法，先按一周一个版本的节奏迭代。每周集中处理真实使用中遇到的卡点，而不是一开始就做复杂功能。
+
+## 接下来可能会做
+
+- 真正可拖动并记住位置的桌面宠物窗口。
+- 全局快捷键快速输入。
+- macOS 通知。
+- 更细的中文解析。
+- 应用设置页面。
+- 更稳定的数据目录迁移。
+
+本项目采用 [GPL-3.0 License](https://github.com/xuguopeng/mu-write/blob/main/LICENSE) 开源。您可以自由地运行、研究、分享和修改代码，但基于本项目修改并分发的新软件也必须同样遵循 GPL-3.0 协议开源。

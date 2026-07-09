@@ -20,7 +20,7 @@ final class PlannerViewModel: ObservableObject {
             parser = TaskParser(defaultWaitingReminderMinutes: store.settings.defaultWaitingReminderMinutes)
         } catch {
             tasks = store.tasks
-            errorMessage = "Could not load saved tasks. A backup was created and a fresh list was started."
+            errorMessage = "没有读到原来的任务数据。应用已经备份旧文件，并从空列表开始。"
         }
     }
 
@@ -54,7 +54,7 @@ final class PlannerViewModel: ObservableObject {
             inputText = ""
             refresh()
         } catch {
-            errorMessage = "Could not save the task."
+            errorMessage = "任务保存失败。"
         }
     }
 
@@ -77,8 +77,7 @@ final class PlannerViewModel: ObservableObject {
     }
 
     func markWaiting(_ task: PlannerTask) {
-        let reminder = Calendar.current.date(byAdding: .minute, value: store.settings.defaultWaitingReminderMinutes, to: Date())
-        perform { try store.markWaiting(task.id, reminder: reminder) }
+        perform { try store.markWaiting(task.id, reminder: task.remindAt) }
     }
 
     func postpone(_ task: PlannerTask) {
@@ -91,7 +90,7 @@ final class PlannerViewModel: ObservableObject {
             try action()
             refresh()
         } catch {
-            errorMessage = "Could not update the task."
+            errorMessage = "任务更新失败。"
         }
     }
 
@@ -101,11 +100,11 @@ final class PlannerViewModel: ObservableObject {
 }
 
 enum TaskFilter: String, CaseIterable, Identifiable {
-    case all = "All"
-    case pinned = "Pinned"
-    case waiting = "Waiting"
-    case urgent = "Urgent"
-    case done = "Done"
+    case all = "全部"
+    case pinned = "桌面显示"
+    case waiting = "等待中"
+    case urgent = "紧急"
+    case done = "已完成"
 
     var id: String { rawValue }
 }

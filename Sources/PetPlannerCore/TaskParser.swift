@@ -49,14 +49,12 @@ public struct TaskParser: Sendable {
             "urgent", "important", "before", "紧急", "重要", "截止", "之前", "前"
         ])
         let relativeReminder = parseRelativeReminder(normalized, now: now)
-        let absoluteTime = parseAbsoluteTime(normalized, now: now)
+        let absoluteTime = shouldParseAbsoluteTime(normalized) ? parseAbsoluteTime(normalized, now: now) : nil
         let reminder: Date?
         if let relativeReminder {
             reminder = relativeReminder
         } else if let absoluteTime {
             reminder = absoluteTime
-        } else if isWaiting {
-            reminder = calendar.date(byAdding: .minute, value: defaultWaitingReminderMinutes, to: now)
         } else {
             reminder = nil
         }
@@ -123,6 +121,12 @@ public struct TaskParser: Sendable {
             return date(on: day, hour: hour, minute: 0)
         }
         return nil
+    }
+
+    private func shouldParseAbsoluteTime(_ text: String) -> Bool {
+        containsAny(text, [
+            "提醒", "叫我", "到点", "截止", "之前", "前", "deadline", "remind", "before", "by "
+        ])
     }
 
     private func normalizedHour(_ hour: Int, isPM: Bool) -> Int {

@@ -102,7 +102,7 @@ Tasks:
   - 等 Claude,
   - 跑完,
   - 结束.
-- Apply default 20-minute reminder for waiting tasks with no parsed time.
+- Leave reminder time empty for waiting tasks with no explicit parsed time.
 - Save raw text even when parsing finds no metadata.
 - Add unit tests for representative English and Chinese phrases.
 
