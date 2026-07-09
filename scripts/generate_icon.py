@@ -31,6 +31,11 @@ def font(size: int, bold: bool = True) -> ImageFont.FreeTypeFont:
 
 
 def make_base_icon(size: int = 1024) -> Image.Image:
+    generated_source = RESOURCES / "MuPlan-generated-icon.png"
+    if generated_source.exists():
+        source = Image.open(generated_source).convert("RGBA")
+        return source.resize((size, size), Image.Resampling.LANCZOS)
+
     scale = size / 1024
     image = Image.new("RGBA", (size, size), (0, 0, 0, 0))
 
