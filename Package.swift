@@ -15,7 +15,10 @@ let package = Package(
         .target(name: "PetPlannerCore"),
         .executableTarget(
             name: "DesktopPetPlannerApp",
-            dependencies: ["PetPlannerCore"]
+            dependencies: ["PetPlannerCore"],
+            resources: [
+                .process("Resources")
+            ]
         ),
         .testTarget(
             name: "PetPlannerCoreTests",

@@ -20,6 +20,7 @@ mkdir -p "$MACOS" "$RESOURCES"
 
 cp "$ROOT/.build/release/$APP_NAME" "$MACOS/$APP_NAME"
 cp "$ROOT/Resources/MuPlan.icns" "$RESOURCES/MuPlan.icns"
+cp "$ROOT/Resources/MuPlan-generated-icon.png" "$RESOURCES/MuPlan-generated-icon.png"
 
 cat > "$CONTENTS/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>

@@ -45,19 +45,12 @@ struct PetWidgetView: View {
     }
 
     private var petIcon: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color.primary)
-                .frame(width: 46, height: 46)
-            HStack(spacing: 10) {
-                Circle().fill(.white).frame(width: 5, height: 5)
-                Circle().fill(.white).frame(width: 5, height: 5)
-            }
-            Capsule()
-                .fill(.white)
-                .frame(width: 18, height: 3)
-                .offset(y: 11)
-        }
+        Image("MuPlan-generated-icon", bundle: .module)
+            .resizable()
+            .scaledToFill()
+            .frame(width: 64, height: 64)
+            .clipShape(RoundedRectangle(cornerRadius: 18))
+            .shadow(color: .black.opacity(0.18), radius: 8, y: 3)
     }
 
     private func reopenMainWindow() {
