@@ -45,12 +45,7 @@ struct PetWidgetView: View {
     }
 
     private var petIcon: some View {
-        Image("MuPlan-generated-icon", bundle: .module)
-            .resizable()
-            .scaledToFill()
-            .frame(width: 64, height: 64)
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-            .shadow(color: .black.opacity(0.18), radius: 8, y: 3)
+        MuPlanIconImage()
     }
 
     private func reopenMainWindow() {
@@ -60,6 +55,36 @@ struct PetWidgetView: View {
         }
         mainWindow?.level = .floating
         mainWindow?.makeKeyAndOrderFront(nil)
+    }
+}
+
+private struct MuPlanIconImage: View {
+    var body: some View {
+        Group {
+            if let image = loadImage() {
+                Image(nsImage: image)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                RoundedRectangle(cornerRadius: 18)
+                    .fill(Color.primary)
+                    .overlay {
+                        Text("μ")
+                            .font(.system(size: 30, weight: .bold))
+                            .foregroundStyle(Color(nsColor: .windowBackgroundColor))
+                    }
+            }
+        }
+        .frame(width: 64, height: 64)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .shadow(color: .black.opacity(0.18), radius: 8, y: 3)
+    }
+
+    private func loadImage() -> NSImage? {
+        guard let url = Bundle.module.url(forResource: "MuPlan-generated-icon", withExtension: "png") else {
+            return nil
+        }
+        return NSImage(contentsOf: url)
     }
 }
 
